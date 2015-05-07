@@ -1,0 +1,8 @@
+/* Empty. Add your own CSS if you like */
+body, html, canvas, div {
+	width:100%;
+	height:100%;
+}
+canvas {
+	background-color: #fff;
+}
