@@ -1,0 +1,18 @@
+<ion-view title="Start">
+  <ion-content padding="false" class="start">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="start.refreshBoards()">
+  	</ion-refresher>
+	<div class="list front">
+	  <div class="item center ecology" ng-repeat="board in boards" ng-click="start.goToDash(board.id)" ng-show="boards.length > 0" style="background-color:rgba({{board.color.r}},{{board.color.g}},{{board.color.b}},1); height:{{ buttonHeight }}">
+	  	<div class="table">
+	  		<div class="table-cell">
+	  			Ecology {{ $index+1 }}
+	  		</div>
+	  	</div>
+	  </div>
+	  <div class="item center no-boards" ng-hide="boards.length > 0">
+		No boards available
+	  </div>
+	</div>
+  </ion-content>
+</ion-view>

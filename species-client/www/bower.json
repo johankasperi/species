@@ -1,0 +1,16 @@
+{
+  "name": "Species",
+  "version": "0.0.0",
+  "homepage": "https://github.com/johankasperi/species-client",
+  "authors": [
+    "Johan Kasperi <johan@kasperi.se>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
