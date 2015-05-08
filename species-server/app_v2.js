@@ -10,9 +10,9 @@ var boards = [];
 
 // The colors for colorcoding the species in the client
 var colors = ["#f9cfd0", "#e0dfef", "#ebcfd1", "#fbf8d7", "#c4e6f2", "#cce1d2"]
-var colorIndex = 0;
-var ballPositions = [[40, 40], [120, 200], [240, 480],
-	[180, 60], [150, 300], [80, 400]];
+var positions = [[0.185, 0.124], [0.825, 0.35], [0.75, 0.85],
+	[0.56, 0.10], [0.47, 0.53], [0.25, 0.7]];
+//var positionIndex = 0;
 
 var io = socketio.listen(server);
 
@@ -20,28 +20,25 @@ io.on('connection', function (socket) {
 
 	// New Galileo connected
 	socket.on('board-connection', function (data) {
-		if(colorIndex > colors.length || ballPositions.length < 1) {
+		if(colorIndex > colors.length || positions.length < 1) {
 			console.log("Cannot handle more boards");
 			return null;
 		}
 		console.log("Board connection!");
 
-		var positionIndex = Math.floor((Math.random() * ballPositions.length) + 1);
-		console.log(positionIndex);
+		var positionIndex = Math.floor((Math.random() * positions.length));
+		var colorIndex = Math.floor((Math.random() * colors.length));
 		var board = {
 			id: socket.id,
 			color: colors[colorIndex],
-			position: ballPositions[positionIndex],
-			radius: Math.floor((Math.random() * 21) + 20)
+			position: positions[positionIndex],
+			radius: (Math.floor((Math.random() * (10 - 6 + 1))) + 6) / 70
 		};
-		console.log(board.position)
-		console.log(board.color)
-		ballPositions.splice(positionIndex, 1);
+		positions.splice(positionIndex, 1);
+		colors.splice(colorIndex, 1);
 		boards.push(board);
 
 		socket.broadcast.emit('client-availableBoards', { boards: boards });
-
-		colorIndex += 1;
 	});
 
 	// Socket disconnected
@@ -52,9 +49,9 @@ io.on('connection', function (socket) {
 		var isBoard = _.find(boards, function(b) { return b.id === socket.id; });
 		if(isBoard) {
 			boards = _.reject(boards, function(b) { return b.id === socket.id; });
-			ballPositions.push(isBoard.position);
 			socket.broadcast.emit('client-availableBoards', { boards: boards });
-			colorIndex -= 1;
+			colors.push(isBoard.color);
+			positions.push(isBoard.position);
 		}
 	})
 
@@ -66,8 +63,6 @@ io.on('connection', function (socket) {
 
 	// Client is sending data to board
 	socket.on('client-sendData', function (data) {
-		console.log("Client is sending data to board!");
 		io.to(data.specie.id).emit('specie-isTouched', { bool: data.bool, value: data.value });
-		//socket.broadcast.emit('otherSpecie-isTouched', { bool: data.bool, value: data.value, color: data.color});
 	})
 });
