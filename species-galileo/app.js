@@ -1,13 +1,13 @@
 var io = require('socket.io-client');
 var mraa = require('mraa');
 var socket = io('http://species.kspri.se');
+var _ = require('underscore');
 
 var digPins = [];
 setupPins([9, 10, 11]); // Edit this line to decide which pins to use
 
 var timeout = null;
-var timing = 0;
-//var timingOther = 0;
+var connectedClients = [];
 
 // Connect to server
 socket.on('connect', function() {
@@ -16,10 +16,10 @@ socket.on('connect', function() {
 
 socket.on('specie-isTouched', function(data) {
 	if(data.bool == true) {
-		startMakingSound(data.value);
+		startMakingSound(data.value, data.client);
 	}
 	else {
-		stopMakingSound(data.value);
+		stopMakingSound(data.value, data.client);
 	}
 })
 
@@ -28,50 +28,39 @@ socket.on('otherSpecie-isTouched', function(data) {
 		startMakingSoundOtherSpecie(data.value);
 	}
 	else {
-		//stopMakingSoundOtherSpecie(data.value);
+		stopMakingSoundOtherSpecie(data.value);
 	}
 })
 
 function startMakingSound(value) {
-	console.log("Start making sound!")
-	if(!timeout) {
-		timing = value;
-		blink(1);
+	var client = _.findWhere(connectedClients, { id: clientId });
+	if(client) {
+		client.timing = value;
 	}
 	else {
-		timing = value;
+		connectedClients.push({
+			id: clientId,
+			timing: value
+		})
+	}
+	if(!timeout) {
+		blink(1);
 	}
 }
 
 function stopMakingSound(value) {
-	console.log("Stop making sound!");
-	clearTimeout(timeout);
-	timeout = null;
-	timing = 0;
-	writePin(0);
-}
-
-function startMakingSoundOtherSpecie(value) {
-	console.log("Start making sound! (other specie)")
-	writePin(1);
-	setTimeout(function() {
-		writePin(0);
-	}, 500)
-	//value *= 0.2;
-	//timingOther = value;
-	/*if(!timeout) {
-		blink(digPin, 1);
-	}*/
-}
-
-function stopMakingSoundOtherSpecie(value) {
-	console.log("Stop making sound! (other specie)");
-	timingOther = 0;
-	if(timing == 0) {
+	connectedClients = _.reject(connectedClients, function(c) { return c.id === clientId });
+	if(connectedClients.length < 1) {
 		clearTimeout(timeout);
 		timeout = null;
 		writePin(0);
 	}
+}
+
+function startMakingSoundOtherSpecie(value) {
+}
+
+function stopMakingSoundOtherSpecie(value) {
 }
 
 function blink(bool) {
@@ -79,7 +68,20 @@ function blink(bool) {
 	timeout = setTimeout(function() {
 		bool = !bool;
 		blink(bool);
-	}, timing);
+	}, getTiming());
+}
+
+function getTiming() {
+	var min = _.min(connectedClients, function(c) { return c.timing });
+	min = min.timing;
+	if(connectedClients.length == 1) {
+		return min;
+	}
+	var sum = 0;
+	for(var i = 0; i<connectedClients.length; i++) {
+		sum += connectedClients[i].timing;
+	}
+	return min - (sum/min);
 }
 
 function setupPins(pins) {

@@ -3,7 +3,6 @@ angular.module('species.services', [])
 .factory('SpeciesService', function($rootScope) {
   var socket = io.connect("http://species.kspri.se");
   var rootScope = $rootScope;
-  var board = null;
 
   return {
     on: function (eventName, callback) {
@@ -25,13 +24,5 @@ angular.module('species.services', [])
         });
       })
     },
-
-    setBoard: function(b) {
-      board = b;
-    },
-
-    getBoard: function() {
-      return board;
-    }
   };
 });

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.species474313" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>species</name>
+<widget id="com.ionicframework.species627031" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>Species</name>
   <description>
-        An Ionic Framework and Cordova project.
+        An app as the client for the species project in INFO490 at UIUC.
     </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+  <author email="johan@kasperi.se" href="http://kasperi.se/">
+      Johan Kasperi
     </author>
   <content src="index.html"/>
   <access origin="*"/>

@@ -1,0 +1,15 @@
+dependencies: \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVCommandDelegateImpl.m \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVCommandDelegateImpl.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVCommandDelegate.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVAvailability.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVAvailabilityDeprecated.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVInvokedUrlCommand.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVJSON_private.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVCommandQueue.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVPluginResult.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVViewController.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVWhitelist.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVScreenOrientationDelegate.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/CDVPlugin.h \
+  /Users/johankasperi/Intel\ Galileo/species/species-client/platforms/ios/CordovaLib/Classes/NSMutableArray+QueueAdditions.h

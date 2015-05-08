@@ -39,16 +39,16 @@
     },
     "installed_plugins": {
         "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.species474313"
+            "PACKAGE_NAME": "com.ionicframework.species627031"
         },
         "org.apache.cordova.console": {
-            "PACKAGE_NAME": "com.ionicframework.species474313"
+            "PACKAGE_NAME": "com.ionicframework.species627031"
         },
         "org.apache.cordova.device": {
-            "PACKAGE_NAME": "com.ionicframework.species474313"
+            "PACKAGE_NAME": "com.ionicframework.species627031"
         },
         "org.apache.cordova.statusbar": {
-            "PACKAGE_NAME": "com.ionicframework.species474313"
+            "PACKAGE_NAME": "com.ionicframework.species627031"
         }
     },
     "dependent_plugins": {}

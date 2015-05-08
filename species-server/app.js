@@ -8,58 +8,11 @@ var server = app.listen(8020);
 // Datastructure for all Galileos and their corresponding client connected to the server
 var boards = [];
 
-// The colors for colorcoding the GUI
-var colors = [
-	{
-		name: "red",
-		r: 255,
-		g: 0,
-		b: 0
-	},
-	{
-		name: "blue",
-		r: 0,
-		g: 0,
-		b: 255
-	},
-	{
-		name: "green",
-		r: 0,
-		g: 255,
-		b: 0
-	},
-	{
-		name: "yellow",
-		r: 255,
-		g: 255,
-		b: 0
-	},
-	{
-		name: "yellow",
-		r: 255,
-		g: 255,
-		b: 0
-	},
-	{
-		name: "orange",
-		r: 255,
-		g: 128,
-		b: 0
-	},
-	{
-		name: "purple",
-		r: 255,
-		g: 0,
-		b: 255
-	},
-	{
-		name: "lightblue",
-		r: 0,
-		g: 255,
-		b: 255
-	},
-]
-var colorIndex = 0;
+// The colors for colorcoding the species in the client
+var colors = ["#f9cfd0", "#e0dfef", "#ebcfd1", "#fbf8d7", "#c4e6f2", "#cce1d2"]
+var positions = [[0.185, 0.124], [0.825, 0.35], [0.75, 0.85],
+	[0.56, 0.10], [0.47, 0.53], [0.25, 0.7]];
+//var positionIndex = 0;
 
 var io = socketio.listen(server);
 
@@ -67,25 +20,25 @@ io.on('connection', function (socket) {
 
 	// New Galileo connected
 	socket.on('board-connection', function (data) {
-		if(colorIndex > colors.length) {
+		if(colorIndex > colors.length || positions.length < 1) {
 			console.log("Cannot handle more boards");
 			return null;
 		}
 		console.log("Board connection!");
+
+		var positionIndex = Math.floor((Math.random() * positions.length));
+		var colorIndex = Math.floor((Math.random() * colors.length));
 		var board = {
 			id: socket.id,
-			hasClient: false,
-			client: {},
-			room: "board"+socket.id,
-			color: colors[colorIndex]
+			color: colors[colorIndex],
+			position: positions[positionIndex],
+			radius: (Math.floor((Math.random() * (10 - 6 + 1))) + 6) / 70
 		};
-		socket.join(board.room);
-
+		positions.splice(positionIndex, 1);
+		colors.splice(colorIndex, 1);
 		boards.push(board);
 
-		socket.broadcast.emit('client-availableBoards', { boards: findAvailableBoards() });
-
-		colorIndex += 1;
+		socket.broadcast.emit('client-availableBoards', { boards: boards });
 	});
 
 	// Socket disconnected
@@ -96,67 +49,25 @@ io.on('connection', function (socket) {
 		var isBoard = _.find(boards, function(b) { return b.id === socket.id; });
 		if(isBoard) {
 			boards = _.reject(boards, function(b) { return b.id === socket.id; });
-			socket.broadcast.emit('client-availableBoards', { boards: findAvailableBoards() });
-			colorIndex -= 1;
-		}
-		else {
-			for(var i = 0; i < boards.length; i++) {
-				if(boards[i].client.id == socket.id) {
-					boards[i].hasClient = false;
-					boards[i].client = {};
-				}
-			}
+			socket.broadcast.emit('client-availableBoards', { boards: boards });
+			colors.push(isBoard.color);
+			positions.push(isBoard.position);
 		}
 	})
 
 	// New client connected
 	socket.on('client-connection', function (data) {
 		console.log("New client!");
-		socket.emit('client-availableBoards', { boards: findAvailableBoards() });
-	})
-
-	// Client has selected board
-	socket.on('client-selectBoard', function (data) {
-		console.log("Client selected a board!");
-
-		for(var i = 0; i < boards.length; i++) {
-			if(boards[i].id == data.id) {
-				boards[i].hasClient = true;
-				boards[i].client = {
-					id: socket.id
-				};
-
-				socket.join(boards[i].room);
-			}
-		}
-		socket.broadcast.emit('client-availableBoards', { boards: findAvailableBoards() });
-	})
-
-	// Client wants to update the board list
-	socket.on('client-refreshBoards', function (data) {
-		socket.emit('client-availableBoards', { boards: findAvailableBoards() });
+		socket.emit('client-availableBoards', { boards: boards });
 	})
 
 	// Client is sending data to board
 	socket.on('client-sendData', function (data) {
-		console.log("Client is sending data to board!");
-		io.to(data.room).emit('specie-isTouched', { bool: data.bool, value: data.value });
-
-		var allOtherBoards = findBoardsThatNotHaveRoom(data.room);
-		_.each(allOtherBoards, function(board) {
-			io.to(board.room).emit('otherSpecie-isTouched', { bool: data.bool, value: data.value, color: data.color});
+		io.to(data.specie.id).emit('specie-isTouched', { bool: data.bool, value: data.value, client: socket.id });
+		_.each(boards, function(board) {
+			if(board.id !== data.specie.id) {
+				io.to(board.id).emit('otherSpecie-isTouched', { bool: data.bool, value: data.value });
+			}
 		})
 	})
 });
-
-function findAvailableBoards() {
-	return _.filter(boards, function(b) { return b.hasClient == false });
-}
-
-function findBoardsThatNotHaveRoom(room) {
-	return _.filter(boards, function(b) { return b.room !== room });
-}
-
-function findBoardByClientId(id) {
-	return _.filter(boards, function(b) { return b.client.id == id });
-}

@@ -20,6 +20,7 @@
 
     <!-- libs -->
     <script src="http://species.kspri.se/socket.io/socket.io.js"></script>
+    <script src="bower_components/paper/dist/paper-full.js"></script>
     <script src="bower_components/hammer.js/hammer.min.js"></script>
 
     <!-- your app's js -->
@@ -28,6 +29,11 @@
     <script src="js/services.js"></script>
   </head>
   <body ng-app="species">
-    <ion-nav-view></ion-nav-view>
+
+    <ion-pane drag-content="false" ng-controller="StartCtrl as start">
+      <ion-content scroll="false" padding="false">
+        <canvas id="canvas" width="100%" height="100%"></canvas>
+      </ion-content>
+    </ion-pane>
   </body>
 </html>
