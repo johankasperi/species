@@ -1,0 +1,24 @@
+{
+  "name": "species-server",
+  "version": "1.0.0",
+  "description": "Server for the species project in INFO490 at UIUC",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johankasperi/species-server.git"
+  },
+  "author": "Johan Kasperi (johan@kasperi.se)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/johankasperi/species-server/issues"
+  },
+  "homepage": "https://github.com/johankasperi/species-server",
+  "dependencies": {
+    "express": "^4.12.3",
+    "socket.io": "^1.3.5",
+    "underscore": "^1.8.3"
+  }
+}
