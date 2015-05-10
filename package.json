@@ -2,10 +2,10 @@
   "name": "species-server",
   "version": "1.0.0",
   "description": "Server for the species project in INFO490 at UIUC",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "supervisor app.js"
   },
+  "main": "app.js"
   "repository": {
     "type": "git",
     "url": "https://github.com/johankasperi/species-server.git"
