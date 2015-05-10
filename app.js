@@ -5,7 +5,7 @@ var _ = require('underscore');
 app = express();
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8020;
-var server = server.listen( port, ipaddress, function() {
+var server = app.listen( port, ipaddress, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
 });
 
