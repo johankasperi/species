@@ -67,7 +67,6 @@ io.on('connection', function (socket) {
 
 	// Client is sending data to board
 	socket.on('client-sendData', function (data) {
-		console.log("Client is sending data!");
 		io.to(data.specie.id).emit('specie-isTouched', { bool: data.bool, value: data.value, client: socket.id });
 		_.each(boards, function(board) {
 			if(board.id !== data.specie.id) {
